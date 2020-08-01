@@ -1,6 +1,6 @@
 var jsonFileName = "samples.json";
 
-/* This function fills dropdown menu values from dataset and draws appropriate charts */
+// This function fills dropdown menu values from dataset and draws appropriate charts
 function init() {
     var selector = d3.select("#selDataset");
     var options;
@@ -21,11 +21,10 @@ function init() {
     });
 }
 
-/*
-  This funtion gets value from json file then gets metadata dictionary
-  and gets values of each element from dictionary and then prints 
-  it to the panel.
-*/
+// Created a function that retrieves values from json file and creates metadata dictionary.
+
+// Will also take each element of the dictionary and put in on the demographic panel
+ 
 function buildMetadata(sample) {
   d3.json(jsonFileName).then((data) => {
       let title = "";
@@ -44,21 +43,21 @@ function buildMetadata(sample) {
   });
 }
 
-/*
-  This function gets data from json file and then for selected sample ID gets other information
-  and calls other graph functions to plot the data.
-*/
+// Uses data from JsonFile and builds charts 
+
 function buildCharts(sample) {
   var samples;
   d3.json(jsonFileName).then((data) => {
+
     // getting metadata dictionary to get wfreq value for guage chart
+
     var metadata = data.metadata;
     var resultArrayMeta  = metadata.filter(sampleObj => sampleObj.id == sample);
     var resultMeta = resultArrayMeta[0];
     console.log("WFRQ: " + resultMeta.wfreq);
     
-    // getting samples for selected id to get 10 sample values and corrospoing
-    // otu labels
+    // slicing data to get top 10 sample values and OTU labels.
+
     samples = data.samples;
     var resultArray  = samples.filter(sampleObj => sampleObj.id == sample);
     var result = resultArray[0];
@@ -82,9 +81,9 @@ function buildCharts(sample) {
 }
 
 
-/*
-  This function plots bar chart with first 10 samples and corrosponding lables.
-*/
+// Plot bar chart using the sliced data and labels
+// putting the sliced data in reverse order so that we see descending order (highest first)
+
 function buildBarChart(firstTenSamples, firstTenOtuLable, sample) {
   var trace = {
     x: firstTenSamples.reverse(),
@@ -97,9 +96,8 @@ function buildBarChart(firstTenSamples, firstTenOtuLable, sample) {
   Plotly.newPlot("bar", data);
 }
 
-/*
-  This function plots bubble chart for sample_values for selected id
-*/
+// Plot bubble chart for sliced data and labels
+
 function buildBubbleChart(otu_ids, sampleValues, otuLabels) {
   var trace = {
     x: otu_ids,
@@ -123,18 +121,16 @@ function buildBubbleChart(otu_ids, sampleValues, otuLabels) {
   Plotly.newPlot('bubble', data, layout);
 }
 
-/*
-  This function create a gauge chart and moves needle according to wash frequncy
-*/
+// plot a gauge chart with a moving needle based on wfreq
+
 function buildGaugeChart(wfreq) {
+
   // Enter a speed between 0 and 180
   var level = parseFloat(wfreq) * 20;
   console.log("LEVEL: " + level);
 
-  /*
-    This code to calculate needle and its position.
-  */
-  // Trig to calc meter point
+  // calculate where the needle position should be using trig to calculate the meter point. 
+ 
   var degrees = 180 - level;
   console.log("DEGREES: "+ degrees);
 
@@ -181,16 +177,16 @@ function buildGaugeChart(wfreq) {
       marker: 
       {
         colors:[
-          "rgba(0, 105, 11, .5)",
-          "rgba(10, 120, 22, .5)",
-          "rgba(14, 127, 0, .5)",
-          "rgba(110, 154, 22, .5)",
-          "rgba(170, 202, 42, .5)",
-          "rgba(202, 209, 95, .5)",
-          "rgba(210, 206, 145, .5)",
-          "rgba(232, 226, 202, .5)",
-          "rgba(240, 230, 215, .5)",
-          "rgba(255, 255, 255, 0)"
+          "rgba(255, 105, 11, .5)",
+          "rgba(255, 120, 22, .5)",
+          "rgba(255, 127, 0, .5)",
+          "rgba(255, 154, 22, .5)",
+          "rgba(255, 202, 42, .5)",
+          "rgba(255, 209, 95, .5)",
+          "rgba(255, 206, 145, .5)",
+          "rgba(255, 226, 202, .5)",
+          "rgba(255, 230, 215, .5)",
+          "rgba(255, 0, 0, 0)"
         ]
       },
       labels: ["8-9", "7-8", "6-7", "5-6", "4-5", "3-4", "2-3", "1-2", "0-1", ""],
